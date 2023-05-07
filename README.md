@@ -54,7 +54,7 @@ rainy,comfortable,high,weak,no
 cloudy,comfortable,high,strong,no
 ```
 
-## Ou9tput
+## Output
 ```
 IG(weather)=0.2467 IG(humidity)=0.1518 IG(wind)=0.0481 IG(temperature)=0.0292
 IG(wind)=0.9710 IG(humidity)=0.0200 IG(temperature)=0.0200
