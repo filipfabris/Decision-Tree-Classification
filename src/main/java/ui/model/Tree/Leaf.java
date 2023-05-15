@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Leaf extends NodeModel{
 
-    private String classLabel;
+    private final String classLabel;
 
     public Leaf(int depth, String classLabel) {
         super(depth);

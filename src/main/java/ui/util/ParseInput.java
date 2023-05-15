@@ -1,6 +1,6 @@
 package ui.util;
 
-import ui.model.DataInput;
+import ui.model.DataSet;
 import ui.model.Inputs;
 
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.util.*;
 
 public class ParseInput {
 
-    public static DataInput parseInput(String path) throws IOException {
+    public static DataSet parseInput(String path) throws IOException {
         //file input
         List<String> lines = Files.readAllLines( Paths.get(path));
 
@@ -41,6 +41,6 @@ public class ParseInput {
 
             featureInputs.add(featureInput);
         }
-        return new DataInput(featureInputs);
+        return new DataSet(featureInputs);
     }
 }

@@ -5,16 +5,16 @@ import java.util.Objects;
 
 public class Node extends NodeModel{
 
-    private String feature;
+    private final String feature;
 
-    private String mostCommonClassOccurrence;
+    private final String mostCommonClassOccurrence;
 
-    private Map<String, NodeModel> children;
+    private final Map<String, NodeModel> children;
 
     public Node(int depth, String feature, String mostCommonClassOccurrence, Map<String, NodeModel> children) {
         super(depth);
-        this.feature = feature;
-        this.mostCommonClassOccurrence = mostCommonClassOccurrence;
+        this.feature = feature; //atribut po kojem se djeli
+        this.mostCommonClassOccurrence = mostCommonClassOccurrence; //yes ili no ili drugo
         this.children = children;
     }
 

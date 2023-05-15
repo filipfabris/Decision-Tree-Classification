@@ -1,11 +1,10 @@
 package ui.algorithm;
 
-import ui.model.DataInput;
+import ui.model.DataSet;
 
 public interface Algorithm {
 
-    void fit(DataInput training);
+    void fit(DataSet training);
 
-    void predict(DataInput testing);
-
+    void predict(DataSet testing);
 }

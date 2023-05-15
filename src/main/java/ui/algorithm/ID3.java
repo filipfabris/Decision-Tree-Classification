@@ -1,6 +1,6 @@
 package ui.algorithm;
 
-import ui.model.DataInput;
+import ui.model.DataSet;
 import ui.model.Inputs;
 import ui.model.Tree.Leaf;
 import ui.model.Tree.Node;
@@ -13,7 +13,7 @@ public class ID3 implements Algorithm{
 
     private NodeModel root;
 
-    private int maxDepth;
+    private final int maxDepth;
 
     public ID3(int depth) {
         this.maxDepth = depth;
@@ -24,15 +24,13 @@ public class ID3 implements Algorithm{
     }
 
     @Override
-    public void fit(DataInput training) {
+    public void fit(DataSet training) {
         this.root = generateTree(training, training, training.features, 0);
-
         Output.printTree(this.root);
-
     }
 
     @Override
-    public void predict(DataInput testing) {
+    public void predict(DataSet testing) {
 
         List<String> result = new LinkedList<>();
 
@@ -47,7 +45,7 @@ public class ID3 implements Algorithm{
 
     }
 
-    private NodeModel generateTree(DataInput set, DataInput parentSet, Set<String> features, int depth){
+    private NodeModel generateTree(DataSet set, DataSet parentSet, Set<String> features, int depth){
         if(set.classEntropy == 0){
             return new Leaf( depth, set.mostCommonClassOccurrence );
         }
@@ -60,11 +58,11 @@ public class ID3 implements Algorithm{
         }
 
         String bestFeature = this.findBestFeature(set, features);
-        Map<String, DataInput> featureSets = set.splitByFeature(bestFeature);
+        Map<String, DataSet> featureSets = set.splitByFeature(bestFeature);
         Map<String, NodeModel> children = new HashMap<>();
 
-        for(Map.Entry<String, DataInput> entry : featureSets.entrySet()){
-            DataInput newSet = entry.getValue();
+        for(Map.Entry<String, DataSet> entry : featureSets.entrySet()){
+            DataSet newSet = entry.getValue();
             Set<String> newFeatures = new HashSet<>(features);
             newFeatures.remove(bestFeature);
             children.put(entry.getKey(), generateTree(newSet, set, newFeatures, depth+1));
@@ -72,7 +70,7 @@ public class ID3 implements Algorithm{
         return new Node(depth, bestFeature, set.mostCommonClassOccurrence, children);
     }
 
-    private String findBestFeature(DataInput set, Set<String> features) {
+    private String findBestFeature(DataSet set, Set<String> features) {
         double maxGain = 0;
         String bestFeature = "";
         StringBuilder sb = new StringBuilder();
@@ -109,7 +107,7 @@ public class ID3 implements Algorithm{
         }
     }
 
-    private double calculateAccuracy(DataInput testingData, List<String> result){
+    private double calculateAccuracy(DataSet testingData, List<String> result){
         int correct = 0;
         for(int i = 0; i < testingData.inputs.size(); i++){
             String actual = testingData.inputs.get(i).getClassLabel(); //Result from testing data
@@ -122,7 +120,7 @@ public class ID3 implements Algorithm{
         return (double) correct / testingData.inputs.size();
     }
 
-    private int[][] calculateConfusionMatrix(DataInput testing, List<String> result) {
+    private int[][] calculateConfusionMatrix(DataSet testing, List<String> result) {
 
         List<String> labels = new ArrayList<>(testing.getLabels());
         Collections.sort(labels);

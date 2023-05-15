@@ -1,7 +1,7 @@
 package ui;
 
 import ui.algorithm.ID3;
-import ui.model.DataInput;
+import ui.model.DataSet;
 import ui.util.ParseInput;
 
 import java.io.IOException;
@@ -27,12 +27,12 @@ public class Solution {
             maxDepth = Integer.parseInt( args[2] );
         }
 
-        DataInput dataInput = ParseInput.parseInput( args[0] );
-        DataInput dataInputTest = ParseInput.parseInput( args[1] );
+        DataSet dataSet = ParseInput.parseInput( args[0] );
+        DataSet dataSetTest = ParseInput.parseInput( args[1] );
 
         ID3 id3 = new ID3(maxDepth);
-        id3.fit( dataInput );
-        id3.predict( dataInputTest );
+        id3.fit( dataSet );
+        id3.predict( dataSetTest );
 
 
 

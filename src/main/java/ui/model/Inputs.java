@@ -1,13 +1,14 @@
 package ui.model;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Inputs {
 
-    private Map<String, String> values;
+    private final Map<String, String> values;
 
     public String classLabel;
 
@@ -27,7 +28,7 @@ public class Inputs {
     }
 
     public Set<String> getFeatures() {
-        return values.keySet().stream().collect( Collectors.toSet());
+        return new HashSet<>( values.keySet() );
     }
 
     public String getFeatureValue(String feature) {

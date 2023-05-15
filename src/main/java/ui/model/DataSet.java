@@ -2,20 +2,20 @@ package ui.model;
 
 import java.util.*;
 
-public class DataInput {
+public class DataSet {
 
-    public List<Inputs> inputs;
+    public List<Inputs> inputs; //Redovi u tabeli
 
-    public Set<String> features;
+    public Set<String> features; //temperature, humidity, windy
 
     public double classEntropy;
-    private Map<String, Integer> labelsOccurances;
+    private final Map<String, Integer> labelsOccurrences;
 
-    public String mostCommonClassOccurrence;
+    public String mostCommonClassOccurrence; //yes ili no ili nesto drugo
 
-    public DataInput(List<Inputs> featureInputs) {
+    public DataSet(List<Inputs> featureInputs) {
         this.inputs = featureInputs;
-        this.labelsOccurances = new HashMap<>();
+        this.labelsOccurrences = new HashMap<>();
         this.setLabels();
         this.calculateLabelOccurrences();
         this.calculateClassEntropy();
@@ -29,17 +29,17 @@ public class DataInput {
     public void calculateLabelOccurrences(){
         for (Inputs input : inputs) {
             String label = input.classLabel; //yes ili no ili nesto drugo
-            if(labelsOccurances.containsKey( label )){
-                labelsOccurances.put( label, labelsOccurances.get( label ) + 1 );
+            if(labelsOccurrences.containsKey( label )){
+                labelsOccurrences.put( label, labelsOccurrences.get( label ) + 1 );
             }else{
-                labelsOccurances.put( label, 1 );
+                labelsOccurrences.put( label, 1 );
             }
         }
     }
 
     public void calculateClassEntropy(){
-        for(String label: labelsOccurances.keySet()){
-            double labelOccurrence = labelsOccurances.get( label );
+        for(String label: labelsOccurrences.keySet()){
+            double labelOccurrence = labelsOccurrences.get( label );
             double total = inputs.size();
             double labelEntropy = (labelOccurrence/total) * Math.log( labelOccurrence/total ) / Math.log( 2 );
             this.classEntropy += -labelEntropy;
@@ -49,12 +49,12 @@ public class DataInput {
     public void calculateMostCommonClassOccurrence(){
         int max = 0;
 
-        List<String> sortedLabels = new ArrayList<>(labelsOccurances.keySet());
+        List<String> sortedLabels = new ArrayList<>( labelsOccurrences.keySet());
         Collections.sort(sortedLabels);
 
         for(String label: sortedLabels){
-            if(labelsOccurances.get( label ) > max){
-                max = labelsOccurances.get( label );
+            if(labelsOccurrences.get( label ) > max){
+                max = labelsOccurrences.get( label );
                 this.mostCommonClassOccurrence = label;
             }
         }
@@ -108,8 +108,8 @@ public class DataInput {
     }
 
 
-    public Map<String, DataInput> splitByFeature(String bestFeature) {
-        Map<String, DataInput> splitedDataInput = new HashMap<>();
+    public Map<String, DataSet> splitByFeature(String bestFeature) {
+        Map<String, DataSet> splitedDataInput = new HashMap<>();
 
         //Pronađi sve vrijednosti za bestFeature, distinct
         List<String> featureValues = new ArrayList<>();
@@ -132,12 +132,12 @@ public class DataInput {
                     featureValueInputs.add( input );
                 }
             }
-            splitedDataInput.put( featureValue, new DataInput( featureValueInputs ) );
+            splitedDataInput.put( featureValue, new DataSet( featureValueInputs ) );
         }
         return splitedDataInput;
     }
 
     public List<String> getLabels(){
-        return labelsOccurances.keySet().stream().toList();
+        return labelsOccurrences.keySet().stream().toList();
     }
 }
